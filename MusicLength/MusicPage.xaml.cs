@@ -12,29 +12,26 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
-using Windows.Storage;
-using Windows.Storage.Search;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using Windows.Storage.FileProperties;
-using Windows.UI.Xaml.Media.Imaging;
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
+// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace MusicLength
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class MainPage : Page
+    public sealed partial class MusicPage : Page
     {
-        public MainPage()
+        TimeSpan timeSpan;
+
+        public MusicPage()
         {
             this.InitializeComponent();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            timeSpan = (TimeSpan)e.Parameter;
             base.OnNavigatedTo(e);
         }
     }

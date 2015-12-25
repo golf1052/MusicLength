@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace MusicLength
 {
@@ -37,13 +38,13 @@ namespace MusicLength
             OtherTracks = new List<Track>();
         }
 
-        public void Add(StorageFile f, MusicProperties p)
+        public async Task Add(StorageFile f, MusicProperties p)
         {
             foreach (Album a in Albums)
             {
                 if (a.Name == p.Album)
                 {
-                    a.Add(f, p);
+                    await a.Add(f, p);
                     return;
                 }
             }
@@ -52,11 +53,14 @@ namespace MusicLength
                 Album album = new Album();
                 album.Name = p.Album;
                 album.Artist = this;
-                album.Add(f, p);
+                await album.Add(f, p);
                 Albums.Add(album);
             }
             else
             {
+                //StorageItemThumbnail thumbnail = await f.GetThumbnailAsync(ThumbnailMode.MusicView);
+                //BitmapImage image = new BitmapImage();
+                //await image.SetSourceAsync(thumbnail);
                 Track t = new Track(f, p, this);
                 OtherTracks.Add(t);
             }

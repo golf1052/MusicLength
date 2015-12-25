@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace MusicLength
 {
@@ -13,6 +14,7 @@ namespace MusicLength
         public string Name { get; set; }
         public List<Track> Tracks { get; set; }
         public Artist Artist { get; set; }
+        public BitmapImage Image { get; set; }
         public TimeSpan Duration
         {
             get
@@ -38,8 +40,15 @@ namespace MusicLength
             Tracks = new List<Track>();
         }
 
-        public void Add(StorageFile f, MusicProperties p)
+        public async Task Add(StorageFile f, MusicProperties p)
         {
+            if (Image == null)
+            {
+                StorageItemThumbnail thumbnail = await f.GetThumbnailAsync(ThumbnailMode.MusicView);
+                BitmapImage image = new BitmapImage();
+                await image.SetSourceAsync(thumbnail);
+                Image = image;
+            }
             Track t = new Track(f, p, Artist);
             Tracks.Add(t);
         }

@@ -1,0 +1,17 @@
+﻿<Page
+    x:Class="MusicLength.LoadingPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:MusicLength"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <StackPanel VerticalAlignment="Center">
+            <ProgressBar x:Name="progressBar" VerticalAlignment="Stretch" d:LayoutOverrides="LeftPosition, RightPosition, TopPosition, BottomPosition" Margin="50,0"/>
+            <TextBlock x:Name="progressTextBlock" HorizontalAlignment="Center" TextWrapping="Wrap" Text="current progress" d:LayoutOverrides="LeftPosition, RightPosition" Margin="0,10,0,0"/>
+        </StackPanel>
+
+    </Grid>
+</Page>
