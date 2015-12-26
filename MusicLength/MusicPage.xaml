@@ -6,8 +6,25 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
+    <Page.BottomAppBar>
+        <CommandBar>
+            <CommandBar.Content>
+                <Grid/>
+            </CommandBar.Content>
+            <AppBarButton x:Name="launchGrooveButton" Icon="Audio" Label="Open Groove" Click="launchGrooveButton_Click"/>
+        </CommandBar>
+    </Page.BottomAppBar>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-
+        <Pivot>
+            <PivotItem Header="Albums">
+                <Grid>
+                    <ListView x:Name="albumsListView" ItemTemplate="{StaticResource AlbumListViewTemplate}" Loaded="albumsListView_Loaded"/>
+                </Grid>
+            </PivotItem>
+            <PivotItem Header="Artists">
+                <Grid/>
+            </PivotItem>
+        </Pivot>
     </Grid>
 </Page>

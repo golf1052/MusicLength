@@ -4,5 +4,21 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:MusicLength"
     RequestedTheme="Light">
+    <Application.Resources>
+        <DataTemplate x:Key="AlbumListViewTemplate">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Image Width="75" Height="75" Source="{Binding Image}"/>
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <TextBlock TextWrapping="Wrap" Text="{Binding Duration}"/>
+                    <TextBlock TextWrapping="Wrap" Text="{Binding Title}"/>
+                    <TextBlock TextWrapping="Wrap" Text="{Binding Artist}"/>
+                </StackPanel>
+            </Grid>
+        </DataTemplate>
+    </Application.Resources>
 
 </Application>

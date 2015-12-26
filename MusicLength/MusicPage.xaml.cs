@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.System;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -24,15 +26,39 @@ namespace MusicLength
     {
         TimeSpan timeSpan;
 
+        ObservableCollection<AlbumListViewBinding> albums;
+
         public MusicPage()
         {
             this.InitializeComponent();
+
+            albums = new ObservableCollection<AlbumListViewBinding>();
         }
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             timeSpan = (TimeSpan)e.Parameter;
+
+            foreach (Artist artist in AppConstants.Music)
+            {
+                foreach (Album album in artist.Albums)
+                {
+                    albums.Add(album.ToBinding());
+                }
+            }
+
             base.OnNavigatedTo(e);
+        }
+
+        private async void launchGrooveButton_Click(object sender, RoutedEventArgs e)
+        {
+            Uri uri = new Uri("mswindowsmusic://");
+            await Launcher.LaunchUriAsync(uri);
+        }
+
+        private void albumsListView_Loaded(object sender, RoutedEventArgs e)
+        {
+            albumsListView.ItemsSource = albums;
         }
     }
 }

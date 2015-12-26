@@ -52,5 +52,15 @@ namespace MusicLength
             Track t = new Track(f, p, Artist);
             Tracks.Add(t);
         }
+
+        public AlbumListViewBinding ToBinding()
+        {
+            AlbumListViewBinding binding = new AlbumListViewBinding();
+            binding.Image = Image;
+            binding.Title = Name;
+            binding.Duration = AlbumListViewBinding.FormatDuration(Duration);
+            binding.Artist = Artist.Name;
+            return binding;
+        }
     }
 }

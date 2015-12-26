@@ -101,6 +101,7 @@
     </Compile>
     <Compile Include="AppConstants.cs" />
     <Compile Include="Artist.cs" />
+    <Compile Include="Binding Classes\AlbumListViewBinding.cs" />
     <Compile Include="LoadingPage.xaml.cs">
       <DependentUpon>LoadingPage.xaml</DependentUpon>
     </Compile>
