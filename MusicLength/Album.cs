@@ -60,6 +60,7 @@ namespace MusicLength
             binding.Title = Name;
             binding.Duration = AlbumListViewBinding.FormatDuration(Duration);
             binding.Artist = Artist.Name;
+            binding.album = this;
             return binding;
         }
     }

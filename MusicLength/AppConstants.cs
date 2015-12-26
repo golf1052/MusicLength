@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 using Windows.Foundation.Collections;
 using Windows.Storage;
 using Windows.Storage.FileProperties;
@@ -15,10 +18,13 @@ namespace MusicLength
         public static string ProgressText { get; private set; }
         public static int NumberCompleted { get; private set; }
         public static int NumberRemaining { get; private set; }
+        private static string accessToken;
+        private static DateTime expiresIn;
 
         static AppConstants()
         {
             Music = new List<Artist>();
+            expiresIn = DateTime.Now;
         }
 
         public static async Task LoadMusic()
@@ -90,6 +96,64 @@ namespace MusicLength
             }
             await artist.Add(f, p);
             Music.Add(artist);
+        }
+
+        public static async Task<string> GetAccessToken()
+        {
+            if (string.IsNullOrEmpty(accessToken) ||
+                DateTime.Now > expiresIn)
+            {
+                await RefreshAccessToken();
+            }
+            return accessToken;
+        }
+
+        private static async Task RefreshAccessToken()
+        {
+            expiresIn = DateTime.Now;
+            HttpClient httpClient = new HttpClient();
+            Dictionary<string, string> data = new Dictionary<string, string>();
+            data.Add("client_id", Secrets.ClientId);
+            data.Add("client_secret", Secrets.ClientSecret);
+            data.Add("scope", "http://music.xboxlive.com");
+            data.Add("grant_type", "client_credentials");
+            HttpResponseMessage response = await httpClient.PostAsync(new Uri("https://datamarket.accesscontrol.windows.net/v2/OAuth2-13"), new FormUrlEncodedContent(data));
+            JObject responseObject = JObject.Parse(await response.Content.ReadAsStringAsync());
+            accessToken = (string)responseObject["access_token"];
+            expiresIn += TimeSpan.FromSeconds((double)responseObject["expires_in"]);
+        }
+
+        public static async Task<JObject> GetGrooveData(string url)
+        {
+            url += "&accessToken=Bearer " + WebUtility.UrlEncode(await GetAccessToken());
+            JObject r = null;
+            HttpResponseMessage response = null;
+            do
+            {
+                HttpClient httpClient = new HttpClient();
+                response = await httpClient.GetAsync(url);
+                if (response.IsSuccessStatusCode)
+                {
+                    r = JObject.Parse(await response.Content.ReadAsStringAsync());
+                }
+                else
+                {
+                    if ((int)response.StatusCode == 429)
+                    {
+                        System.Diagnostics.Debug.WriteLine("rate limit");
+                    }
+                    else if (response.StatusCode == HttpStatusCode.NotFound)
+                    {
+                        return null;
+                    }
+                    else
+                    {
+                        throw new Exception(response.StatusCode.ToString());
+                    }
+                }
+            }
+            while ((int)response.StatusCode == 429);
+            return r;
         }
     }
 }

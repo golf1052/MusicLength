@@ -16,15 +16,26 @@
     </Page.BottomAppBar>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <Pivot>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid x:Name="progressGrid" Background="{ThemeResource SystemControlBackgroundAccentBrush}">
+            <StackPanel Margin="0,15,0,5">
+                <ProgressBar x:Name="progressBar" VerticalAlignment="Stretch" Height="4" d:LayoutOverrides="LeftPosition, RightPosition" Margin="50,0" Foreground="White"/>
+                <TextBlock x:Name="progressTextBlock" TextWrapping="Wrap" Text="progress" HorizontalAlignment="Center" Margin="0,5,0,0" TextAlignment="Center"/>
+            </StackPanel>
+        </Grid>
+        <Pivot Grid.Row="1">
             <PivotItem Header="Albums">
                 <Grid>
-                    <ListView x:Name="albumsListView" ItemTemplate="{StaticResource AlbumListViewTemplate}" Loaded="albumsListView_Loaded"/>
+                    <ListView x:Name="albumsListView" ItemTemplate="{StaticResource AlbumListViewTemplate}" Loaded="albumsListView_Loaded" ItemContainerStyle="{StaticResource AlbumListViewStyle}" ItemClick="albumsListView_ItemClick" IsItemClickEnabled="True" SelectionMode="None"/>
                 </Grid>
             </PivotItem>
             <PivotItem Header="Artists">
                 <Grid/>
             </PivotItem>
         </Pivot>
+        <WebView x:Name="hiddenWebView" HorizontalAlignment="Left" Margin="0" Width="0" Height="0" Visibility="Collapsed"/>
     </Grid>
 </Page>

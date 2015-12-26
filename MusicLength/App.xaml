@@ -11,14 +11,37 @@
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <Image Width="75" Height="75" Source="{Binding Image}"/>
-                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                <Image Width="100" Height="100" Source="{Binding Image}"/>
+                <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="5,0,0,0">
                     <TextBlock TextWrapping="Wrap" Text="{Binding Duration}"/>
                     <TextBlock TextWrapping="Wrap" Text="{Binding Title}"/>
                     <TextBlock TextWrapping="Wrap" Text="{Binding Artist}"/>
+                    <Grid HorizontalAlignment="Left" VerticalAlignment="Top">
+                        <SymbolIcon Symbol="Audio" Visibility="{Binding LinkSet}" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                    </Grid>
                 </StackPanel>
             </Grid>
         </DataTemplate>
+        <Style x:Key="AlbumListViewStyle" TargetType="ListViewItem">
+            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
+            <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
+            <Setter Property="TabNavigation" Value="Local"/>
+            <Setter Property="IsHoldingEnabled" Value="True"/>
+            <Setter Property="Padding" Value="12,0,12,0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="MinWidth" Value="{ThemeResource ListViewItemMinWidth}"/>
+            <Setter Property="MinHeight" Value="{ThemeResource ListViewItemMinHeight}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListViewItem">
+                        <ListViewItemPresenter CheckBrush="{ThemeResource SystemControlForegroundBaseMediumHighBrush}" ContentMargin="{TemplateBinding Padding}" CheckMode="Inline" ContentTransitions="{TemplateBinding ContentTransitions}" CheckBoxBrush="{ThemeResource SystemControlForegroundBaseMediumHighBrush}" DragForeground="{ThemeResource ListViewItemDragForegroundThemeBrush}" DragOpacity="{ThemeResource ListViewItemDragThemeOpacity}" DragBackground="{ThemeResource ListViewItemDragBackgroundThemeBrush}" DisabledOpacity="{ThemeResource ListViewItemDisabledThemeOpacity}" FocusBorderBrush="{ThemeResource SystemControlForegroundAltHighBrush}" FocusSecondaryBorderBrush="{ThemeResource SystemControlForegroundBaseHighBrush}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" PointerOverForeground="{ThemeResource SystemControlHighlightAltBaseHighBrush}" PressedBackground="{ThemeResource SystemControlHighlightListMediumBrush}" PlaceholderBackground="{ThemeResource ListViewItemPlaceholderBackgroundThemeBrush}" PointerOverBackground="{ThemeResource SystemControlHighlightListLowBrush}" ReorderHintOffset="{ThemeResource ListViewItemReorderHintThemeOffset}" SelectedPressedBackground="{ThemeResource SystemControlHighlightListAccentHighBrush}" SelectionCheckMarkVisualEnabled="True" SelectedForeground="{ThemeResource SystemControlHighlightAltBaseHighBrush}" SelectedPointerOverBackground="{ThemeResource SystemControlHighlightListAccentMediumBrush}" SelectedBackground="{ThemeResource SystemControlHighlightListAccentLowBrush}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" Margin="0,5"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Application.Resources>
 
 </Application>
