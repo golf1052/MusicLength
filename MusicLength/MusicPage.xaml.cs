@@ -79,7 +79,10 @@ namespace MusicLength
                 startingAlbumIndex++;
             }
 
-            await LoadGrooveData(startingAlbumIndex);
+            if (albums.Count > 0)
+            {
+                await LoadGrooveData(startingAlbumIndex);
+            }   
         }
 
         private async Task LoadGrooveData(int starting)
@@ -89,53 +92,47 @@ namespace MusicLength
             progressBar.Maximum = albums.Count;
             progressTextBlock.Text = progressBar.Value + " of " + progressBar.Maximum +
                 "\nretrieving Groove Music links";
-            bool upDirection = false;
-            int upNumber = starting;
-            int downNumber = starting;
-            do
+            int i = starting;
+            int j = starting + 1;
+            while (i >= 0 || j < albums.Count)
             {
-                AlbumListViewBinding binding = albums[starting];
-                // do things
-                if (upDirection && downNumber < albums.Count)
+                if (i >= 0)
                 {
-                    upDirection = false;
-                    downNumber++;
-                    starting = downNumber;
+                    await LoadAlbum(i);
+                    i--;
                 }
-                else if (!upDirection && upNumber >= 0)
+                if (j < albums.Count)
                 {
-                    upDirection = true;
-                    upNumber--;
-                    starting = upNumber;
+                    await LoadAlbum(j);
+                    j++;
                 }
-            }
-            while (upNumber >= 0 && downNumber < albums.Count);
-
-            for (int i = 0; i < albums.Count; i++)
-            {
-                AlbumListViewBinding binding = albums[i];
-                string url = "https://music.xboxlive.com/1/content/music/search?q=" +
-                    binding.Title + " " + binding.Artist +
-                    "&filters=albums";
-                JObject o = await AppConstants.GetGrooveData(url);
-                if (o != null)
-                {
-                    string albumName = (string)o["Albums"]["Items"][0]["Name"];
-                    string artistName = (string)o["Albums"]["Items"][0]["Artists"][0]["Artist"]["Name"];
-                    if (albumName == binding.Title &&
-                        artistName == binding.Artist)
-                    {
-                        binding.Link = ((string)o["Albums"]["Items"][0]["Id"]).Split('.')[1];
-                        binding.LinkSet = Visibility.Visible;
-                        albums.RemoveAt(i);
-                        albums.Insert(i, binding);
-                    }
-                }
-                progressBar.Value++;
-                progressTextBlock.Text = progressBar.Value + " of " + progressBar.Maximum +
-                    "\nretrieving Groove Music links";
             }
             progressGrid.Visibility = Visibility.Collapsed;
+        }
+
+        private async Task LoadAlbum(int i)
+        {
+            AlbumListViewBinding binding = albums[i];
+            string url = "https://music.xboxlive.com/1/content/music/search?q=" +
+                binding.Title + " " + binding.Artist +
+                "&filters=albums";
+            JObject o = await AppConstants.GetGrooveData(url);
+            if (o != null)
+            {
+                string albumName = (string)o["Albums"]["Items"][0]["Name"];
+                string artistName = (string)o["Albums"]["Items"][0]["Artists"][0]["Artist"]["Name"];
+                if (albumName == binding.Title &&
+                    artistName == binding.Artist)
+                {
+                    binding.Link = ((string)o["Albums"]["Items"][0]["Id"]).Split('.')[1];
+                    binding.LinkSet = Visibility.Visible;
+                    albums.RemoveAt(i);
+                    albums.Insert(i, binding);
+                }
+            }
+            progressBar.Value++;
+            progressTextBlock.Text = progressBar.Value + " of " + progressBar.Maximum +
+                "\nretrieving Groove Music links";
         }
 
         private async void albumsListView_ItemClick(object sender, ItemClickEventArgs e)
