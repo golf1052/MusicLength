@@ -68,27 +68,49 @@ namespace MusicLength
                 albums.Add(album.Value.ToBinding());
             }
 
-            int i = 0;
+            int startingAlbumIndex = 0;
             foreach (KeyValuePair<TimeSpan, Album> album in sortedAlbums)
             {
                 if (album.Key > timeSpan)
                 {
-                    albumsListView.ScrollIntoView(albums[i]);
+                    albumsListView.ScrollIntoView(albums[startingAlbumIndex]);
                     break;
                 }
-                i++;
+                startingAlbumIndex++;
             }
 
-            await LoadGrooveData();
+            await LoadGrooveData(startingAlbumIndex);
         }
 
-        private async Task LoadGrooveData()
+        private async Task LoadGrooveData(int starting)
         {
             progressBar.IsIndeterminate = false;
             progressBar.Value = 0;
             progressBar.Maximum = albums.Count;
             progressTextBlock.Text = progressBar.Value + " of " + progressBar.Maximum +
                 "\nretrieving Groove Music links";
+            bool upDirection = false;
+            int upNumber = starting;
+            int downNumber = starting;
+            do
+            {
+                AlbumListViewBinding binding = albums[starting];
+                // do things
+                if (upDirection && downNumber < albums.Count)
+                {
+                    upDirection = false;
+                    downNumber++;
+                    starting = downNumber;
+                }
+                else if (!upDirection && upNumber >= 0)
+                {
+                    upDirection = true;
+                    upNumber--;
+                    starting = upNumber;
+                }
+            }
+            while (upNumber >= 0 && downNumber < albums.Count);
+
             for (int i = 0; i < albums.Count; i++)
             {
                 AlbumListViewBinding binding = albums[i];
