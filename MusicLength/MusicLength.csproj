@@ -113,6 +113,9 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Secrets.cs" />
+    <Compile Include="TestingPage.xaml.cs">
+      <DependentUpon>TestingPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TimePickerPage.xaml.cs">
       <DependentUpon>TimePickerPage.xaml</DependentUpon>
     </Compile>
@@ -148,6 +151,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="MusicPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TestingPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
